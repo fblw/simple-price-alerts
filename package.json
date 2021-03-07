@@ -12,7 +12,7 @@
   },
   "scripts": {
     "start": "rm -rf ./sqlite.db && node ./utils/init-db && pm2 start index.js --cron '*/5 * * * *' --log ./pm2.log",
-    "index ": "node index",
+    "index": "node index",
     "init-db": "node ./utils/init-db"
   },
   "devDependencies": {

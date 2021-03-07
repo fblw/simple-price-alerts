@@ -5,7 +5,6 @@ import sqlite3 from 'sqlite3';
 import axios from 'axios';
 
 const THRESHOLD = 50.0
-
 const INTERVAL = '4h'
 
 const db = new sqlite3.Database(config.db.name)
@@ -18,15 +17,17 @@ for (let symbol in rsiValues){
     
     db.serialize(() => {
         
-        db.get(`SELECT symbols, isBelowThreshold FROM ${config.db.table} WHERE symbols="${symbol}";`, (err, row) => { 
+        db.get(`SELECT symbols, isBelowThreshold, timestamp FROM ${config.db.table} WHERE symbols="${symbol}";`, (err, row) => {
+
+            let timeDelta = Math.floor((Math.abs(new Date() - new Date(row.timestamp))/1000)/60);
             
-            if (rsiValues[symbol] < THRESHOLD && !row.isBelowThreshold) {
+            if (rsiValues[symbol] < THRESHOLD && !row.isBelowThreshold && timeDelta >= 90) {
                 
-                db.run(`UPDATE ${config.db.table} SET isBelowThreshold = 1 WHERE symbols="${symbol}";`);
+                db.run(`UPDATE ${config.db.table} SET isBelowThreshold = 1, timestamp = "${new Date()}" WHERE symbols="${symbol}";`);
 
                 axios.post(config.telegram.baseUrl + config.telegram.accessToken + '/sendMessage', {
                     chat_id: config.telegram.groupId,
-                    text: `${new Date()} Binance Alert [${symbol}USDT/${INTERVAL}]: RSI unter ${THRESHOLD}`
+                    text: `Binance Alert [${symbol}USDT/${INTERVAL}]: RSI unter ${THRESHOLD} ${new Date()}`
                 })
                 .then(function (response) {
                     console.log(response);
