@@ -5,7 +5,6 @@
   "license": "MIT",
   "type": "module",
   "dependencies": {
-    "aws-sdk": "^2.858.0",
     "axios": "^0.21.1",
     "pm2": "^4.5.5",
     "sqlite3": "^5.0.2",
