@@ -11,7 +11,8 @@
     "talib": "^1.1.3"
   },
   "scripts": {
-    "index": "node --experimental-json-modules index"
+    "start": "node --experimental-json-modules index",
+    "init-db": "node ./utils/init-db"
   },
   "devDependencies": {
     "typescript": "^4.2.3"
