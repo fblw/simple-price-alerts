@@ -4,7 +4,7 @@ import computeRsi from './utils/compute.js';
 import config from './config.js';
 import sqlite3 from 'sqlite3';
 
-const THRESHOLD = 45.0
+const THRESHOLD = 42.0
 
 const INTERVAL = '4h'
 
@@ -34,13 +34,13 @@ for (let symbol in rsiValues){
 
                 const alert = {
                     Subject: 'RSI Alert',
-                    Message: `Binance Alert [${symbol}USDT/${INTERVAL}]: RSI unter ${THRESHOLD}`,
+                    Message: `${new Date()} Binance Alert [${symbol}USDT/${INTERVAL}]: RSI unter ${THRESHOLD}`,
                     TopicArn: `arn:aws:sns:${config.aws.region}:${config.aws.userId}:binanceAlerts`
                 };
         
                 sns.publish(alert, (e, res) => {
                     if (e) console.log(e, e.stack);
-                    else console.log(`Sending alert for ${symbol} >> MessageId: ${res.MessageId}`);
+                    else console.log(`${new Date()} Sending alert for ${symbol} >> MessageId: ${res.MessageId}`);
                 });
 
             } else {
