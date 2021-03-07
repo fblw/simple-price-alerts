@@ -1,5 +1,5 @@
 import axios from 'axios';
-import symbols from "../symbols.json";
+import symbols from "./symbols.js";
 
 export default function getBinanceData (interval, limitSymbols = 98) {
     
@@ -12,7 +12,7 @@ export default function getBinanceData (interval, limitSymbols = 98) {
             )
     }
 
-    let requests = Array.from(Object.keys(symbols).slice(0,limitSymbols), s => getKlines(s + 'USDT', interval))
+    let requests = Array.from(symbols.slice(0,limitSymbols), s => getKlines(s + 'USDT', interval))
     
     return Promise.all(requests)
         .then(function (results) {

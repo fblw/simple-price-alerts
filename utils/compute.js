@@ -1,4 +1,4 @@
-import symbols from "../symbols.json";
+import symbols from "./symbols.js";
 import { createRequire } from "module";
 const require = createRequire(import.meta.url);
 const talib = require('talib');
@@ -27,7 +27,7 @@ export default function computeRsi(data) {
             optInTimePeriod: 14
         });
 
-        computedValues[Object.keys(symbols)[i]] = rsi.result.outReal.slice(-1,rsi.length)[0]
+        computedValues[symbols[i]] = rsi.result.outReal.slice(-1,rsi.length)[0]
     });
 
     return computedValues

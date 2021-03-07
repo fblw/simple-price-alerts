@@ -6,7 +6,7 @@ import sqlite3 from 'sqlite3';
 
 const THRESHOLD = 45.0
 
-const INTERVAL = '1h'
+const INTERVAL = '4h'
 
 const db = new sqlite3.Database(config.db.name)
 
@@ -30,23 +30,21 @@ for (let symbol in rsiValues){
             
             if (rsiValues[symbol] < THRESHOLD && !row.isBelowThreshold) {
                 
-                console.log(symbol);
-
                 db.run(`UPDATE ${config.db.table} SET isBelowThreshold = 1 WHERE symbols="${symbol}";`);
 
                 const alert = {
                     Subject: 'RSI Alert',
                     Message: `Binance Alert [${symbol}USDT/${INTERVAL}]: RSI unter ${THRESHOLD}`,
-                    TopicArn: `arn:aws:sns:${config.aws.region}:${config.aws.userId}:BinanceAlerts`
+                    TopicArn: `arn:aws:sns:${config.aws.region}:${config.aws.userId}:binanceAlerts`
                 };
         
                 sns.publish(alert, (e, res) => {
                     if (e) console.log(e, e.stack);
-                    else console.log('MessageId: ' + res.MessageId);
+                    else console.log(`Sending alert for ${symbol} >> MessageId: ${res.MessageId}`);
                 });
 
             } else {
-                
+
                 db.run(`UPDATE ${config.db.table} SET isBelowThreshold = 0 WHERE symbols="${symbol}";`);
             }
         });
