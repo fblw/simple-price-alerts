@@ -1,5 +1,5 @@
 {
-  "name": "binance-aggregator",
+  "name": "simple-price-alerts",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
